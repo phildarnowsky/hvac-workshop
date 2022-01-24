@@ -1,13 +1,13 @@
 # Welcome to the HVAC Workshop!
-This project is a barebones AWS Serverless environment with lots of opportunities for improvement. It defines a simple service that's used to set up buildings. It currently consists of a pair of parent/child entities:
-1. `Buildings`:  have an id, name, and setpoints
-2. `Rooms`: also have an id, name, and setpoints.
+This project is a barebones AWS Serverless environment with lots of opportunities for improvement. It defines a simple service for managing information about customer buildings, which currently consists of a pair of parent/child entities:
+1. `Buildings`:  have a buildingId, name, and setpoints
+2. `Zone`: have a zoneId, buildingId, name, and setpoints.
 
 ## Getting Started
 ### Prerequisites:
 * We should have provided you with an AWS account
-* Install the aws-cli
-* Clone this project
+* Install the [aws-cli](https://aws.amazon.com/cli/)
+* Fork this project
 * Check out the [AWS CDK framework](https://docs.aws.amazon.com/cdk/v2/guide/home.html)
 
 ### Setup
@@ -21,7 +21,7 @@ This project is a barebones AWS Serverless environment with lots of opportunitie
 ### See your deployed infrastructure.
 Sign into the AWS console and check out the parts of your deployed serverless application
 * **CloudFormation**: View the stack "HvacWorkshopStack" deployed on your behalf by CDK
-* **DynamoDB**: View and modify the DynamoDB table set up for our service. There will be no items to begin with, but you can use the existing API to seed some data (see "Call the Api" below).
+* **DynamoDB**: View and modify the DynamoDB table set up for our service. There will be no items to begin with, but you can use the existing API to seed some data (see "Call the Api" below or modify the integration tests to ignore cleanup).
 * **Lambda**: View compiled typescript code, trigger endpoints manually, and modify lambda code. Use the "Monitor" tab and click "View logs in CloudWatch" to see logs from previous runs.
     * **Modifying code**: While you can safely modify the lambda code in-place, those changes will be overwritten on the next deployment.
     * **External libraries**: The current packaging system places all our external library source code at the top of the lambda code assets. Go to the bottom to view handler code.
@@ -40,13 +40,11 @@ curl --request POST \
 ```
 
 # Tasks
-Time to get your hands dirty! Use the existing code, online resources, and the AWS console to add the following features to the project. Everything can be done by writting CDK code and running `npm run cdk deploy`. 
-
-If you run into any issues or need clarification, feel free to reach out.
+Time to get your hands dirty! Use the existing code, online resources, and the AWS console to add the following features to the project. Everything can be done by writting CDK code and running `npm run cdk deploy`. There are integration tests for each task that can be unskipped once they are implemented. If you run into any issues or need clarification, feel free to reach out.
 
 1. Add the endpoint: "GET /building/{buildlingId}", which retrieves an existing building by id.
 2. Add the endpoint: "UPDATE /building/{buildingId}", which updates the name and setpoints for a building.
-3. Add the endpoint: "GET /building/zone/{zoneId}/setpoints". Return either the building setpoints if the zone does not define setpoints (the field is optional) or the zone setpoints if they are specified. Notice that the path is no longer prepended with the buildingId [Hint: check out DynamoDB secondary indexes].
+3. Add the endpoint: "GET /building/zone/{zoneId}/setpoints", which returns the zones setpoint (if specified) or falls back to the building default setpoint. Notice that the path is no longer prepended with the buildingId [Hint: check out DynamoDB secondary indexes].
 
 ## Helpful Resources
 * [DynamoDB Overview](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.CoreComponents.html): Goes over the core components of AWS DynamoDB

@@ -1,4 +1,3 @@
-
 import { DynamoDB } from "aws-sdk";
 import { LambdaHandler, jsonResponse } from "./helpers";
 
