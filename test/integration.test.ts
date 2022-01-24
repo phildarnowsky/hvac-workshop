@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // TODO: Replace buildingApiUrl with actual value
-const buildingApiUrl = "https://k5jkpyg7ji.execute-api.us-east-1.amazonaws.com/prod";
+const buildingApiUrl = "https://6ztuwgteba.execute-api.us-east-1.amazonaws.com/prod/";
 
 const testClient = axios.create({
     baseURL: buildingApiUrl,
