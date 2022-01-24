@@ -16,10 +16,12 @@ const handler: LambdaHandler = async (event) => {
         return jsonResponse(422, "Invalid JSON body");
     }
 
+    // Required param
     if (!body.name) {
         return jsonResponse(422, "Must provide a name: string");
     }
 
+    // Optional param
     if (body.setpoints && body.setpoints.length !== 2) {
         return jsonResponse(422, "Setpoints must be of type [number, number]")
     }

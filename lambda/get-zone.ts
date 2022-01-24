@@ -21,7 +21,7 @@ const handler: LambdaHandler = async (event) => {
         return jsonResponse(404, `No zone with id: ${zoneId}`);
     }
 
-    return jsonResponse(200, ...zoneGetResponse.Item[0]);
+    return jsonResponse(200, zoneGetResponse.Item);
 }
 
 exports.handler = handler;

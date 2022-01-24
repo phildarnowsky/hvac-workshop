@@ -1,5 +1,6 @@
 import axios from "axios";
 
+// TODO: Replace buildingApiUrl with actual value
 const buildingApiUrl = "https://k5jkpyg7ji.execute-api.us-east-1.amazonaws.com/prod";
 
 const testClient = axios.create({
@@ -8,61 +9,70 @@ const testClient = axios.create({
 });
 
 describe("BuildingApi", () => {
-    const buildingIds: string[] = [];
-
-    afterAll(async () => {
-        // Check for buildings that need cleanup
-        if (buildingIds.length > 0) {
-            console.warn(`[WARNING] Attempting to clean up the following buildings: ${buildingIds}`);
-        }
-
-        buildingIds.forEach(async (buildingId) => {
-            await testClient.delete(`/building/${buildingId}`);
-        });
-    });
+    let buildingId: string;
+    let zoneId: string;
 
     test("creates building", async () => {
-        const result1 = await testClient.post(`/building`, {
+        const result = await testClient.post(`/building`, {
             name: "Test Building 1",
-            setpoints: [68, 72]
+            setpoints: [70, 74]
         });
-        buildingIds.push(result1.data.id);
+        buildingId = result.data.id;
 
-        expect(result1.status).toEqual(200);
-        expect(result1.data).toBeTruthy();
-        expect(result1.data).toHaveProperty("name", "Test Building 1");
-        expect(result1.data).toHaveProperty("setpoints", [68,72]);
-
-        // const result2 = await testClient.post(`/building`, {
-        //     name: "Test Building 2",
-        //     setpoints: [60,70]
-        // });
-        // buildingIds.push(result2.data.id);
-
-        // expect(result1.status).toEqual(200);
-        // expect(result1.data).toBeTruthy();
-        // expect(result1.data).toHaveProperty("name", "Test Building 2");
-        // expect(result1.data).toHaveProperty("setpoints", [60,70]);
+        expect(result.status).toEqual(200);
+        expect(result.data).toBeTruthy();
+        expect(result.data).toHaveProperty("name", "Test Building 1");
+        expect(result.data).toHaveProperty("setpoints", [70,74]);
     });
 
-    // test("creates zone for building", async () => {
-    //     const result1 = await testClient.post(`building/zone/{zoneId}/`, {
-    //         name: "Test Zone 1",
-    //         buildingId: buildingId[0],
-    //     });
-    //     zoneIds.push(result1.data.sk.split("#")[1]);
+    test("creates zone for building", async () => {
+        const result = await testClient.post(`building/${buildingId}/zone`, {
+            name: "Test Zone 1",
+            buildingId: buildingId,
+            setpoints: [68, 72]
+        });
+        zoneId = result.data.id;
+        console.log(zoneId);
 
-    //     expect(result1.status).toEqual(200);
-    //     expect(result1.data).toBeTruthy();
-    //     expect(result1.data).toHaveProperty("pk", `BUILDING#${buildingId}`);
-    //     expect(result1.data).toHaveProperty("name", "Test Zone 1");
-    // })
+        expect(result.status).toEqual(200);
+        expect(result.data).toBeTruthy();
+        expect(result.data).toHaveProperty("name", "Test Zone 1");
+        expect(result.data).toHaveProperty("setpoints", [68,72]);
+    });
+
+    test ("get zone", async () => {
+        const result = await testClient.get(`building/${buildingId}/zone/${zoneId}`);
+
+        expect(result.status).toEqual(200);
+        expect(result.data).toBeTruthy();
+        expect(result.data).toHaveProperty("name", "Test Zone 1");
+        expect(result.data).toHaveProperty("setpoints", [68,72]);
+    });
+
+    test("get building", async () => {
+
+    })
+
+    test("update building", async () => {
+        
+    });
+
+    test("update zone", async () => {
+
+    });
+
+    test("get zone schedule", async () => {
+        const result = await testClient.get(`zone/${zoneId}/`)
+    })
+
+
+    test ("deletes zone", async () => {
+        const result = await testClient.delete(`/building/${buildingId}/zone/${zoneId}`);
+        expect(result.status).toEqual(204);
+    });
 
     test("deletes building", async () => {
-        const buildingId1 = buildingIds.pop();
-        // const buildingId2 = buildingIds.pop();
-
-        const result1 = await testClient.delete(`/building/${buildingId1}`);
-        expect(result1.status).toEqual(204);
+        const result = await testClient.delete(`/building/${buildingId}`);
+        expect(result.status).toEqual(204);
     });
 })
