@@ -11,11 +11,12 @@ This project is a barebones AWS Serverless environment with lots of opportunitie
 * Check out the [AWS CDK framework](https://docs.aws.amazon.com/cdk/v2/guide/home.html)
 
 ### Setup
-1. Run `aws configure` and use the provided `access key` and `secret access key` (other values can stay default)
-2. From the project, run `cdk bootstrap` to get initial resources for subsequent CDK deployments.
-3. Run `npm run cdk diff` to view the changset that CDK is ready to deploy. After taking a look, actually deploy the project with `cdk deploy`.
-4. Find the "Outputs" section in the deploy logs. Find the api url (e.g. https://some-unique-id.execute-api.us-east-1.amazonaws.com/prod/). This will be our api url for the rest of the project. If you lose it, go to the AWS ApiGateway console and find it in "Api > Dashboard".
-5. Go to the `test/integration.test.ts` file and replace `buildingApiUrl` with your api url from step #4. Run the tests with `npm run test`.
+1. Run `npm install`
+2. Run `aws configure` and use the provided `access key` and `secret access key` (other values can stay default)
+3. From the project, run `npm run cdk bootstrap` to get initial resources for subsequent CDK deployments.
+4. Run `npm run cdk diff` to view the changset that CDK is ready to deploy. After taking a look, actually deploy the project with `npm run cdk deploy`.
+5. Find the "Outputs" section in the deploy logs. Find the api url (e.g. https://some-unique-id.execute-api.us-east-1.amazonaws.com/prod/). This will be our api url for the rest of the project. If you lose it, go to the AWS ApiGateway console and find it in "Api > Dashboard".
+6. Go to the `test/integration.test.ts` file and replace `buildingApiUrl` with your api url from step #4. Run the tests with `npm run test`.
 
 ## Explore
 ### See your deployed infrastructure.
