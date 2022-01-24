@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-import * as cdk from 'aws-cdk-lib';
-import { HvacWorkshopStack } from '../lib/hvac-workshop-stack';
+import * as cdk from '@aws-cdk/core';
+import { BuildingApiStack } from '../lib/building-api-stack';
 
 const app = new cdk.App();
-new HvacWorkshopStack(app, 'HvacWorkshopStack');
+new BuildingApiStack(app, 'HvacWorkshopStack');
