@@ -44,6 +44,15 @@ export class BuildingApiStack extends Stack {
     const getBuildingIntegration = new LambdaIntegration(getBuildingLambda)
     api.root.resourceForPath('/building/{buildingId}').addMethod('GET', getBuildingIntegration)
 
+    // UPDATE BUILDING
+    const updateBuildingLambda = new NodejsFunction(this, 'UpdateBuildingHandler', {
+      entry: 'lambda/update-building.ts',
+      environment: { BUILDING_TABLE_NAME: buildingTable.tableName }
+    })
+    buildingTable.grantReadWriteData(updateBuildingLambda)
+    const updateBuildingIntegration = new LambdaIntegration(updateBuildingLambda)
+    api.root.resourceForPath('/building/{buildingId}').addMethod('PATCH', updateBuildingIntegration)
+
     // CREATE ZONE
     const createZoneLambda = new NodejsFunction(this, 'CreateZoneHandler', {
       entry: 'lambda/create-zone.ts',

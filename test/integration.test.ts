@@ -69,8 +69,7 @@ describe('BuildingApi', () => {
     expect(result.data).toHaveProperty('setpoints', [70, 74])
   })
 
-  // TODO: Complete task 2 and unskip (remove "x" from "xtest")
-  xtest('TASK 2: Update building', async () => {
+  test('TASK 2: Update building', async () => {
     const result = await testClient.patch(`building/${buildingId}`, {
       name: 'Updated Test Building 1',
       setpoints: [72, 78]
