@@ -14,7 +14,10 @@ const handler: LambdaHandler = async (event) => {
       pk: `BUILDING#${buildingId}`,
       sk: `ZONE#${zoneId}`
     }
-  }).promise().catch(console.error)
+  }).promise().catch((errorMessage) => {
+    console.error(errorMessage)
+    return null
+  })
 
   if (!zoneGetResponse?.Item) {
     return jsonResponse(404, `No zone with id: ${zoneId}`)

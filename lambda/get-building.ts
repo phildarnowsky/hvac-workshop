@@ -13,7 +13,10 @@ const handler: LambdaHandler = async (event) => {
       pk: `BUILDING#${buildingId}`,
       sk: 'PROFILE'
     }
-  }).promise().catch(console.error)
+  }).promise().catch((errorMessage) => {
+    console.error(errorMessage)
+    return null
+  })
 
   if (!buildingGetResponse?.Item) {
     return jsonResponse(404, `No building with id: ${buildingId}`)
