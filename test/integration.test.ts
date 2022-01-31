@@ -60,14 +60,13 @@ describe('BuildingApi', () => {
     expect(result.data).toHaveProperty('setpoints', [68, 72])
   })
 
-  // TODO: Complete task 1 and unskip (remove "x" from "xtest")
-  xtest('TASK 1: Get building', async () => {
-    const result = await testClient.get(`building/${buildingId}/zone/${zoneId1}`)
+  test('TASK 1: Get building', async () => {
+    const result = await testClient.get(`building/${buildingId}`)
 
     expect(result.status).toEqual(200)
     expect(result.data).toBeTruthy()
-    expect(result.data).toHaveProperty('name', 'Test Zone 1')
-    expect(result.data).toHaveProperty('setpoints', [68, 72])
+    expect(result.data).toHaveProperty('name', 'Test Building 1')
+    expect(result.data).toHaveProperty('setpoints', [70, 74])
   })
 
   // TODO: Complete task 2 and unskip (remove "x" from "xtest")
