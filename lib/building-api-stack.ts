@@ -1,7 +1,7 @@
 import { Stack, StackProps, Construct } from '@aws-cdk/core'
 import { NodejsFunction } from '@aws-cdk/aws-lambda-nodejs'
 import { RestApi, LambdaIntegration } from '@aws-cdk/aws-apigateway'
-import { AttributeType, Table } from '@aws-cdk/aws-dynamodb'
+import { AttributeType, Table, ProjectionType } from '@aws-cdk/aws-dynamodb'
 
 export class BuildingApiStack extends Stack {
   constructor (scope: Construct, id: string, props?: StackProps) {
@@ -10,6 +10,12 @@ export class BuildingApiStack extends Stack {
     const buildingTable = new Table(this, 'BuildingTable', {
       partitionKey: { name: 'pk', type: AttributeType.STRING },
       sortKey: { name: 'sk', type: AttributeType.STRING }
+    })
+    buildingTable.addGlobalSecondaryIndex({
+      indexName: 'zone_id',
+      partitionKey: { name: 'sk', type: AttributeType.STRING },
+      nonKeyAttributes: ['pk', 'setpoints'],
+      projectionType: ProjectionType.INCLUDE
     })
 
     const api = new RestApi(this, 'Api')
@@ -79,5 +85,14 @@ export class BuildingApiStack extends Stack {
     buildingTable.grantReadWriteData(getZoneLambda)
     const getZoneIntegration = new LambdaIntegration(getZoneLambda)
     api.root.resourceForPath('/building/{buildingId}/zone/{zoneId}').addMethod('GET', getZoneIntegration)
+
+    // GET ZONE SETPOINTS
+    const getZoneSetpointsLambda = new NodejsFunction(this, 'GetZoneSetpointsHandler', {
+      entry: 'lambda/get-zone-setpoints.ts',
+      environment: { BUILDING_TABLE_NAME: buildingTable.tableName }
+    })
+    buildingTable.grantReadWriteData(getZoneSetpointsLambda)
+    const getZoneSetpointsIntegration = new LambdaIntegration(getZoneSetpointsLambda)
+    api.root.resourceForPath('/building/zone/{zoneId}/setpoints').addMethod('GET', getZoneSetpointsIntegration)
   }
 }

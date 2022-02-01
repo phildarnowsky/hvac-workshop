@@ -85,8 +85,7 @@ describe('BuildingApi', () => {
     expect(getResult.data).toHaveProperty('setpoints', [72, 78])
   })
 
-  // TODO: Complete task 3 and unskip (remove "x" from "xtest")
-  xtest('TASK 3: Get zone setpoints', async () => {
+  test('TASK 3: Get zone setpoints', async () => {
     // Returns zone-specific setpoints
     const result1 = await testClient.get(`building/zone/${zoneId1}/setpoints`)
     expect(result1.status).toEqual(200)
