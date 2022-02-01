@@ -1,4 +1,3 @@
-
 import { DynamoDB } from 'aws-sdk'
 import { LambdaHandler, jsonResponse } from './helpers'
 
@@ -8,15 +7,22 @@ const dynamodbClient = new DynamoDB.DocumentClient()
 const handler: LambdaHandler = async (event) => {
   const buildingId = event.pathParameters?.buildingId
 
-  await dynamodbClient.delete({
+  const buildingGetResponse = await dynamodbClient.get({
     TableName: BUILDING_TABLE_NAME,
     Key: {
       pk: `BUILDING#${buildingId}`,
       sk: 'PROFILE'
     }
-  }).promise().catch(console.error)
+  }).promise().catch((errorMessage) => {
+    console.error(errorMessage)
+    return null
+  })
 
-  return jsonResponse(204)
+  if (!buildingGetResponse?.Item) {
+    return jsonResponse(404, `No building with id: ${buildingId}`)
+  }
+
+  return jsonResponse(200, buildingGetResponse.Item)
 }
 
 exports.handler = handler
